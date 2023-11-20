@@ -34,7 +34,7 @@ class TemplatesController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'note' => 'required'
+            'note' => 'required|max:255'
         ]);
         // dd($request->all());
         DB::beginTransaction();
@@ -75,10 +75,10 @@ class TemplatesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Template $template)
+    public function update(Request $request, Template $template)
     {
         $request->validate([
-            'note' => 'required:templates,note,' . $template->id,
+            'note' => 'required|max:255'
         ]);
 
         DB::beginTransaction();
@@ -104,8 +104,8 @@ class TemplatesController extends Controller
      */
     public function destroy(Template $template)
     {
-        // dd($template->id);
         $template->delete();
+
         return redirect()->route('templates.index')->withMessage('Delete Successfully');
     }
 }

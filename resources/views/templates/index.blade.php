@@ -41,13 +41,16 @@
                                     <td><span
                                             class="badge rounded-pill @if ($template->is_active) bg-success @else bg-danger @endif me-1">{{ $template->is_active ? 'Active' : 'In-Active' }}</span>
                                     </td>
-                                    <td>
+                                    <td class="d-flex">
                                         <a class="btn btn-primary"
                                             href="{{ route('templates.edit', $template->id) }}">Edit</a>
-                                        <a class="btn btn-danger">
-                                            <form action="{{ route('templates.destroy', $template->id) }}"
-                                                method="delete"> Delete </form>
-                                        </a>
+
+                                        <form action="{{ route('templates.destroy', $template->id) }}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-danger">
+                                                Delete</button>
+                                        </form>
 
 
 
