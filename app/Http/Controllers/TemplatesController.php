@@ -67,24 +67,45 @@ class TemplatesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Template $template)
     {
-        //
+        return view('templates.edit', compact('template'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,Template $template)
     {
-        //
+        $request->validate([
+            'note' => 'required:templates,note,' . $template->id,
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $template->update([
+                'note' => $request->note,
+                'is_active' => $request->is_active == 1
+            ]);
+            DB::commit();
+        } catch (Exception $e) {
+            // dd($e->getMessage());
+            DB::rollBack();
+            return back()->withErrors([
+                'message' => 'Something Went Wrong !!'
+            ]);
+        }
+        return redirect()->route('templates.index')->withMessage('template Created SuccessFully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Template $template)
     {
-        //
+        // dd($template->id);
+        $template->delete();
+        return redirect()->route('templates.index')->withMessage('Delete Successfully');
     }
 }
